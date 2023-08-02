@@ -13,8 +13,8 @@ To get started with the project, follow these steps:
 
 Use the following command to install all the required dependencies:
 
-```bash
-npm install
+
+`npm install`
 
 This will automatically install all the dependencies listed in the package.json file, including:
 
