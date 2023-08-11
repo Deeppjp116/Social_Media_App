@@ -9,6 +9,7 @@ import multer from 'multer';
 import mongoose from 'mongoose';
 import { register } from './controllers/auth.js';
 import authRoutes from './routes/auth.js';
+import { verifyToken } from './middleware/auth.js';
 
 // CONFIGURATION
 
@@ -42,7 +43,6 @@ app.post('/auth/register', upload.single('picture'), register);
 
 // ROUTES
 app.use('/auth', authRoutes);
-
 
 // Mongoose Setup
 
