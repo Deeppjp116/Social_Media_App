@@ -10,10 +10,10 @@ export const verifyToken = async (req, res, next) => {
     }
 
     const varified = jwt.verify(token, process.env.JWT_SECRET);
-
     req.user = varified;
     next();
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+ 
