@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getFeedPosts, getUserPost, likePost } from '../controllers/posts.js';
+import { getFeedPosts, getUserPosts, likePost } from '../controllers/posts.js';
 
 import { verifyToken } from '../middleware/auth.js';
 
