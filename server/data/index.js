@@ -273,7 +273,6 @@ export const posts = [
       [userIds[1], true],
       [userIds[2], true],
     ]),
-
     comments: [
       'Can I play video games now?',
       "No let's actually study",

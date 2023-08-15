@@ -15,8 +15,7 @@ import { verifyToken } from './middleware/auth.js';
 import { createPost } from './controllers/posts.js';
 import User from './models/User.js';
 import Post from './models/Post.js';
-import {users,posts} from "./"
- 
+import { users, posts } from './data/index.js';
 
 // CONFIGURATION
 
@@ -64,5 +63,10 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port:${PORT} Connected`));
+
+    // // ADD DATA ONE TIME
+
+    // User.insertMany(users);
+    // Post.insertMany(posts);
   })
   .catch((e) => console.log(`${e}  did not Connect`));
