@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { token } from 'morgan';
 
+// SETTING THE INITALSTATE
 const initialState = {
   mode: 'light',
   user: null,
@@ -8,6 +8,7 @@ const initialState = {
   posts: [],
 };
 
+// CREATING THE ACTIONS AND ROOT_REDUSERS
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -31,9 +32,22 @@ export const authSlice = createSlice({
         console.error('The User friends non-existent :(');
       }
     },
-    setPosts:(state,action)=>{
-        state.token = action.payload.token;
-
-    }
+    setPosts: (state, action) => {
+      state.token = action.payload.posts ;
+    },
+    setPost: (state, action) => {
+      const updatePost = state.posts.map((post) => {
+        if (post._id === action.payload.post_id) return action.payload.post;
+        return post;
+      });
+      state.posts = updatePost;
+    },
   },
 });
+
+//SETING THE REDUCER
+
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
+  authSlice.actions;
+
+export default authSlice.reducer;
