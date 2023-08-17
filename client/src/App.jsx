@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import HomePage from './scenes/homePage';
 import LoginPage from './scenes/loginPage';
-import Navbar from './scenes/navbar';
+import Navbar from './scenes/navbar/index.jsx';
 import ProfilePage from './scenes/proflePage';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -26,6 +26,7 @@ function App() {
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
+      <Navbar />
     </>
   );
 }
