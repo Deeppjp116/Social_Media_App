@@ -25,8 +25,8 @@ function App() {
             <Route path='/ ' element={<ProfilePage />} />
           </Routes>
         </ThemeProvider>
+        <Navbar />
       </BrowserRouter>
-      <Navbar />
     </>
   );
 }
