@@ -39,7 +39,8 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  const fullName = `${user.firstName} ${user.lastName}`;
+  // const fullName = `${user.firstName} ${user.lastName}`;
+  const fullName = `Deep prajapati`;
 
   return (
     <FlexBetween padding='1rem 6%' backgroundColor={alt}>
@@ -56,7 +57,7 @@ const Navbar = () => {
             },
           }}
         >
-          Sociopedia
+          Sociable
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
@@ -66,9 +67,7 @@ const Navbar = () => {
             padding='0.1rem 1.5rem'
           >
             <InputBase placeholder='Search...' />
-            <IconButton>
-              <Search />
-            </IconButton>
+            <IconButton>{/* <Search /> */}</IconButton>
           </FlexBetween>
         )}
       </FlexBetween>
