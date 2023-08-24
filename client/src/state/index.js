@@ -16,7 +16,7 @@ export const authSlice = createSlice({
     setMode: (state) => {
       state.mode = state.mode === 'light' ? 'dark' : 'light';
     },
-    setLogIn: (state, action) => {
+    setLogin: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
