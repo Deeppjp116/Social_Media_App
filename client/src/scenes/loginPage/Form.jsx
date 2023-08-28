@@ -13,35 +13,36 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLogin } from '../../state/index';
+import { setLogin } from '../../state';
 import Dropzone from 'react-dropzone';
 import FlexBetween from '../../components/FelxBtween.jsx';
 
-const registerSchma = yup.object().shape({
+const registerSchema = yup.object().shape({
   firstName: yup.string().required('required'),
   lastName: yup.string().required('required'),
-  email: yup.string().email('Invallid email').required('required'),
-  pasword: yup.string().required('required'),
+  email: yup.string().email('Invalid email').required('required'),
+  location: yup.string().required('required'),
+  password: yup.string().required('Password is required'),
   occupation: yup.string().required('required'),
   picture: yup.string().required('required'),
 });
 
 const loginSchema = yup.object().shape({
-  email: yup.string().email('Invallid email').required('required'),
-  pasword: yup.string().required('required'),
+  email: yup.string().email('Invalid email').required('required'),
+  password: yup.string().required('required'),
 });
 
-const initialValusRegister = {
+const initialValuesRegister = {
   firstName: '',
   lastName: '',
   email: '',
   password: '',
   location: '',
   occupation: '',
-  picture: '',
+  picture: '', // Initialize it as an empty string
 };
 
-const initialValusLogin = {
+const initialValuesLogin = {
   email: '',
   password: '',
 };
@@ -58,39 +59,54 @@ const Form = () => {
   const isRegister = pageType === 'register';
 
   const register = async (values, onSubmitProps) => {
-    // this allows to send form info with Image
-    const formData = new FormData();
-    console.log(values);
+    console.log('Register button clicked');
+    try {
+      const formData = new FormData();
+      console.log('Data called');
+      console.log(values);
 
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-    formData.append('picturePath', values.picture.name);
-
-    const savedUserResponse = await fetch(
-      'http://localhost:6001/auth/register',
-      {
-        method: 'POST',
-        body: formData,
+      for (let value in values) {
+        formData.append(value, values[value]);
       }
-    );
-    const savedUser = await savedUserResponse.json();
+      if (values.picture) {
+        formData.append('picturePath', values.picture.name);
+      }
+      const savedUserResponse = await fetch(
+        'http://localhost:1111/auth/register',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+      const savedUser = await savedUserResponse.json();
+      console.log('Clicked on register');
 
-    onSubmitProps.resetForm();
+      // Check if onSubmitProps exists before calling resetForm
+      if (onSubmitProps && onSubmitProps.resetForm) {
+        onSubmitProps.resetForm();
+      }
 
-    if (savedUser) {
-      setPageType('login');
+      if (savedUser) {
+        setPageType('login');
+      }
+    } catch (error) {
+      console.log('Error', error);
     }
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch('http://localhost:6001/auth.login', {
+    const loggedInResponse = await fetch('http://localhost:1111/auth/login', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),
     });
+
     const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
+
+    // Check if onSubmitProps exists before calling resetForm
+    if (onSubmitProps && onSubmitProps.resetForm) {
+      onSubmitProps.resetForm();
+    }
 
     if (loggedIn) {
       dispatch(
@@ -102,22 +118,24 @@ const Form = () => {
       navigate('/home');
     }
   };
-  const handelFormSubmit = async (values, onSubmitProps) => {
+
+  const handleFormSubmit = async (values, onSubmitProps) => {
+    console.log('handleFormSubmit is called');
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
   };
 
   return (
     <Formik
-      onSubmit={handelFormSubmit}
-      initialValues={isLogin ? initialValusLogin : initialValusRegister} // Corrected prop name to 'initialValues'
-      validationSchema={isLogin ? loginSchema : registerSchma}
+      onSubmit={handleFormSubmit}
+      initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
+      validationSchema={isLogin ? loginSchema : registerSchema}
     >
       {({
         values,
         errors,
         touched,
-        handelBlur,
+        handleBlur,
         handleChange,
         handleSubmit,
         setFieldValue,
@@ -128,13 +146,15 @@ const Form = () => {
             display='grid'
             gap={'30px'}
             gridTemplateColumns='repeat(4,minmax(0,1fr))'
-            sx={{ '&>div': { gridColumn: isNonMobile ? undefined : 'span 4' } }}
+            sx={{
+              '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
+            }}
           >
             {isRegister && (
               <>
                 <TextField
                   label='First Name'
-                  onBlur={handelBlur}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.firstName}
                   name='firstName'
@@ -146,7 +166,7 @@ const Form = () => {
                 />
                 <TextField
                   label='Last Name'
-                  onBlur={handelBlur}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.lastName}
                   name='lastName'
@@ -155,8 +175,8 @@ const Form = () => {
                   sx={{ gridColumn: 'span 4' }}
                 />
                 <TextField
-                  label='ccupation'
-                  onBlur={handelBlur}
+                  label='Occupation'
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.occupation}
                   name='occupation'
@@ -175,9 +195,12 @@ const Form = () => {
                   <Dropzone
                     acceptedFiles='.jpg,jpeg,.png'
                     multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue('picture', acceptedFiles[0])
-                    }
+                    onDrop={(acceptedFiles) => {
+                      // Set the picture field to the name of the accepted file if a file is selected
+                      if (acceptedFiles.length > 0) {
+                        setFieldValue('picture', acceptedFiles[0].name);
+                      }
+                    }}
                   >
                     {({ getRootProps, getInputProps }) => (
                       <Box
@@ -191,7 +214,7 @@ const Form = () => {
                           <p>Add Picture Here</p>
                         ) : (
                           <FlexBetween>
-                            <Typography>{values.picture.name}</Typography>
+                            <Typography>{values.picture}</Typography>
                             <EditOutlinedIcon />
                           </FlexBetween>
                         )}
@@ -203,7 +226,7 @@ const Form = () => {
             )}
             <TextField
               label='Email'
-              onBlur={handelBlur}
+              onBlur={handleBlur}
               onChange={handleChange}
               value={values.email}
               name='email'
@@ -214,7 +237,7 @@ const Form = () => {
             <TextField
               label='Password'
               type='password'
-              onBlur={handelBlur}
+              onBlur={handleBlur}
               onChange={handleChange}
               value={values.password}
               name='password'
@@ -224,9 +247,10 @@ const Form = () => {
             />
           </Box>
 
-          {/* {Buttons Sections } */}
+          {/* Buttons Section */}
           <Box>
             <Button
+              // onClick={handleFormSubmit}
               fullWidth
               type='submit'
               sx={{
@@ -237,7 +261,7 @@ const Form = () => {
                 '&:hover': { color: palette.primary.main },
               }}
             >
-              {isLogin ? '   LOGIN' : 'REGISTER'}
+              {isLogin ? 'LOGIN' : 'REGISTER'}
             </Button>
             <Typography
               onClick={() => {
@@ -245,7 +269,7 @@ const Form = () => {
                 resetForm();
               }}
               sx={{
-                textDecoration: 'underlien',
+                textDecoration: 'underline',
                 color: palette.primary.main,
                 '&:hover': {
                   cursor: 'pointer',
@@ -254,8 +278,8 @@ const Form = () => {
               }}
             >
               {isLogin
-                ? "Don't have an account? Sign Up here "
-                : 'Alredy have an account? Login here'}
+                ? "Don't have an account? Sign Up here"
+                : 'Already have an account? Login here'}
             </Typography>
           </Box>
         </form>

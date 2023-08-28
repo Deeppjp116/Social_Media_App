@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import Form from './Form.jsx';
+
 const LoginPage = () => {
   const theme = useTheme();
   const isNoMobileScreens = useMediaQuery('(min-width:1000px)');
@@ -8,8 +9,8 @@ const LoginPage = () => {
     <Box>
       <Box
         width='100%'
-        backgroundColor={theme.palette.background.alt}
-        p='1rem 6%'
+        bgcolor={theme.palette.background.alt}
+        padding='1rem 6%'
         textAlign='center'
       >
         <Typography
@@ -17,21 +18,17 @@ const LoginPage = () => {
           fontSize='clamp(1rem, 2rem, 2.25rem)'
           color='primary'
         >
-          Sociable
+          SocialNet
         </Typography>
       </Box>
       <Box
         width={isNoMobileScreens ? '50%' : '93%'}
-        p='2rem'
-        m='2rem auto'
+        padding='2rem'
+        margin='2rem auto'
         borderRadius='1.5rem'
-        backgroundColor={theme.palette.background.alt}
+        bgcolor={theme.palette.background.alt}
       >
-        <Typography
-          fontWeight='500'
-          variant='h5'
-          sx={{ md: '1.5rem' }}
-        ></Typography>
+        <Typography fontWeight='500' variant='h5'></Typography>
         <Form />
       </Box>
     </Box>
