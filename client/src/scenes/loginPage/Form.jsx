@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { Formik } from 'formik';
+import { Formik, Form as FormikForm } from 'formik'; // Import Formik and Form
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -141,7 +141,8 @@ const Form = () => {
         setFieldValue,
         resetForm,
       }) => (
-        <form onSubmit={handleSubmit}>
+        <FormikForm onSubmit={handleSubmit}>
+          {/* Use FormikForm here */}
           <Box
             display='grid'
             gap={'30px'}
@@ -246,11 +247,13 @@ const Form = () => {
               sx={{ gridColumn: 'span 4' }}
             />
           </Box>
-
           {/* Buttons Section */}
           <Box>
             <Button
-              // onClick={handleFormSubmit}
+              onClick={(e) => {
+                e.preventDefault(); // Prevent the default form submission
+                handleFormSubmit(values, handleSubmit); // Call your custom handler with values and handleSubmit
+              }}
               fullWidth
               type='submit'
               sx={{
@@ -282,7 +285,7 @@ const Form = () => {
                 : 'Already have an account? Login here'}
             </Typography>
           </Box>
-        </form>
+        </FormikForm> // Close FormikForm
       )}
     </Formik>
   );
