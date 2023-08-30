@@ -173,7 +173,7 @@ const Form = () => {
                   name='lastName'
                   error={Boolean(touched.lastName) && Boolean(errors.lastName)}
                   helperText={touched.lastName && errors.lastName}
-                  sx={{ gridColumn: 'span 4' }}
+                  sx={{ gridColumn: 'span 2' }}
                 />
                 <TextField
                   label='Occupation'

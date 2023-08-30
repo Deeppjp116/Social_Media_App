@@ -15,10 +15,8 @@ export const register = async (req, res) => {
       occupation,
     } = req.body;
 
-    console.log('Received registration request:', req.body);
     const salt = await bcrypt.genSalt();
-    console.log('Salt:', salt);
-    console.log('Password:', password);
+
     const passwordHash = await bcrypt.hash(password, salt).catch((err) => {
       console.error(err);
     });
@@ -36,11 +34,7 @@ export const register = async (req, res) => {
       impressions: Math.floor(Math.random() * 10000), // Corrected Math.random()
     });
 
-    console.log('Attempting to save user:', newUser); // Add this line to log the user object before saving
-
     const savedUser = await newUser.save();
-
-    console.log('User saved successfully:', savedUser); // Add this line to log the saved user object
 
     res.status(201).json(savedUser);
   } catch (err) {
@@ -61,7 +55,6 @@ export const login = async (req, res) => {
 
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
-    console.log('User logged in:', user); // Added this line
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     delete user.password;
     res.status(200).json({ token, user });
