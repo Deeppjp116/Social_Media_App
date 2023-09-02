@@ -102,8 +102,26 @@ const UserWidget = ({ userId, picturePath }) => {
             <Typography color={main}>{viewedProfile}</Typography>
           </FlexBetween>
           <FlexBetween>
-            <Typography color={medium}>mipresstion of your post</Typography>
-            <Typography color={main}>{viewedProfile}</Typography>
+            <Typography color={medium}>Imipresstion of your post</Typography>
+            <Typography color={main}>{main}</Typography>
+          </FlexBetween>
+        </Box>
+        {/* FORTH ROW */}
+        <Box p='1rem 0'>
+          <Typography fontSize='1rem' color={main} fontWeight='500' mb='1rem'>
+            Social Profiles
+          </Typography>
+          <FlexBetween gap='1rem' mb='0.5rem'>
+            <FlexBetween gap='1rem'>
+              <img src='../../../public/assets/twitter.png' alt='twitter' />
+              <Box>
+                <Typography color={main} fontWeight='500'>
+                  Witter
+                </Typography>
+                <Typography color={medium}> SocialNet</Typography>
+              </Box>
+            </FlexBetween>
+            <EditOutlined sx={{ color: main }} />
           </FlexBetween>
         </Box>
       </FlexBetween>
